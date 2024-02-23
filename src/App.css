@@ -36,3 +36,267 @@
     transform: rotate(360deg);
   }
 }
+
+/*Layout*/
+.row{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.layout-container {
+  display: flex;
+  height: 100vh; /* Full viewport height */
+  overflow: hidden; /* Prevent the overall layout from scrolling */
+}
+
+.sidebar-main {
+  width: 20%;
+  background-color: #071821;
+  border-top-right-radius: 50px;
+  height: 100vh; /* Full viewport height */
+  overflow-y: auto; /* Allows the sidebar to scroll independently if needed */
+}
+
+.header-main{
+  width: 80%;
+  height: 10%;
+}
+.main-content {
+  flex-grow: 1; /* Takes up remaining space */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevents direct children from causing scroll */
+}
+
+.main-container {
+  flex-grow: 1; /* Takes up remaining space */
+  overflow-y: auto; /* Allows content to scroll */
+  padding: 1%;
+  margin-bottom: 0;
+}
+
+.column{
+  display: flex;
+  flex-direction: column;
+}
+
+/*Sidebar Container*/
+
+.logo-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: auto;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+}
+
+.sidebar {
+  width: 250px;
+  height: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+
+.sidebarMenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebarItem {
+  padding: 20px 20px 0;
+}
+
+.menuButton {
+  text-decoration: none;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  padding: 10px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 800;
+  text-align: left;
+}
+
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out;
+}
+
+.submenu.open {
+  max-height: 200px; /* Adjust as needed */
+}
+
+.sidebarLink {
+  text-decoration: none;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 20px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.sidebarSubLink {
+  text-decoration: none;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 20px 10px 40px;
+  font-size: 16px;
+}
+
+.sidebarLink:hover {
+  background: #FF5A00;
+  border-radius: 20px;
+}
+
+.icon{
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.menuButton:hover {
+  background: #FF5A00;
+  border-radius: 20px;
+}
+
+/*Header*/
+
+.header-container {
+  width: 75vw;
+  height: 60%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #071821;
+  color: white;
+  border-radius: 30px;
+  margin: 2%;
+}
+
+.header-icon-container{
+  display: flex;
+  flex-direction: row;
+  width: auto;
+  align-items: center;
+}
+
+.circle{
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
+  background-color: orange;
+}
+
+/*Login Container*/
+
+.login-container{
+  width: 100%;
+  height: 100%;
+  background-color: #071821;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-input {
+  width: 70%;
+  height: 2%;
+  border: none;
+  border-radius: 10px;
+  background-color: #F4F4F4;
+  padding: 20px;
+  font-size: 16px;
+  margin-bottom: 2%;
+}
+
+.loginBtn {
+  width: 40%;
+  height: 6%;
+  background-color: #FF5A00;
+  border: none;
+  border-radius: 20px;
+  font-size: 20px;
+  font-weight: 800;
+  color: white
+}
+
+/*Home Screen*/
+.home .home-total-boxes {
+  margin-right: 1rem;
+}
+.home-total-boxes{
+  width: 25%;
+  height: 40%;
+  background-color: #071821;
+  color: white;
+  border-radius: 18px;
+  padding: 2rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.home-chart{
+  margin: 0.5rem;
+}
+
+.chart-box-sm {
+  width: 30%;
+  height: 50%;
+  background-color: #071821;
+  color: white;
+  border-radius: 18px;
+  padding: 1rem;
+  margin: 1rem 0 1rem 0;
+}
+
+.chart-box-md {
+  width: 54%;
+  height: 50%;
+  background-color: #071821;
+  color: white;
+  border-radius: 18px;
+  padding: 1rem;
+  margin: 1rem;
+}
+
+.chart-box-lg {
+  width: 93%;
+  height: 60%;
+  background-color: #071821;
+  color: white;
+  border-radius: 18px;
+  padding: 1rem;
+  margin: 1rem;
+}
+
+/*Add Product*/
+
+.gray-container-lg{
+  width:90%;
+  height: 80%;
+  background-color: #ebebeb;
+  padding: 1rem;
+}
