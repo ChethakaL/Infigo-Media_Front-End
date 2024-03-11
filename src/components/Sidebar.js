@@ -4,6 +4,7 @@ import { MdSpaceDashboard, MdArticle } from "react-icons/md";
 import { FaProductHunt, FaPlus, FaEye } from 'react-icons/fa'; // Importing icons
 import '../App.css';
 import logo from '../assets/logo.png';
+import {FaRegMessage} from "react-icons/fa6";
 
 const Sidebar = () => {
     const [isProductMenuOpen, setProductMenuOpen] = useState(false);
@@ -20,17 +21,27 @@ const Sidebar = () => {
             </div>
             <ul className="sidebarMenu">
                 <li className="sidebarItem">
-                    <Link to="/" className="sidebarLink">< MdSpaceDashboard style={{marginRight: '10px'}}/> Dashboard</Link>
+                    <Link to="/" className="sidebarLink">< MdSpaceDashboard
+                        style={{marginRight: '10px'}}/> Dashboard</Link>
                 </li>
                 <li className="sidebarItem">
-                    <button onClick={toggleProductMenu} className="menuButton"><FaProductHunt style={{marginRight: '10px'}} /> Product</button>
+                    <button onClick={toggleProductMenu} className="menuButton"><FaProductHunt
+                        style={{marginRight: '10px'}}/> Product
+                    </button>
                     <div className={`submenu ${isProductMenuOpen ? 'open' : ''}`}>
-                        <Link to="/product/add" className="sidebarSubLink"><FaPlus style={{marginRight: '10px'}}/> Add</Link>
-                        <Link to="/product/manage" className="sidebarSubLink"><FaEye style={{marginRight: '10px'}}/> Manage</Link>
+                        <Link to="/product/add" className="sidebarSubLink"><FaPlus
+                            style={{marginRight: '10px'}}/> Add</Link>
+                        <Link to="/product/manage" className="sidebarSubLink"><FaEye
+                            style={{marginRight: '10px'}}/> Manage</Link>
                     </div>
                 </li>
                 <li className="sidebarItem">
-                    <Link to="/content" className="sidebarLink"><MdArticle style={{marginRight: '10px'}}/> Content</Link>
+                    <Link to="/message" className="sidebarLink">< FaRegMessage
+                        style={{marginRight: '10px'}}/> Message</Link>
+                </li>
+                <li className="sidebarItem">
+                    <Link to="/content" className="sidebarLink"><MdArticle
+                        style={{marginRight: '10px'}}/> Content</Link>
                 </li>
             </ul>
         </div>
