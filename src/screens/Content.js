@@ -29,7 +29,7 @@ function Content() {
         formData.append('visionPic', visionImage);
 
         try {
-            const response = await axios.post('http://192.168.0.100:4001/api/content', formData, {
+            const response = await axios.post('http://165.22.252.230/backend/api/content', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

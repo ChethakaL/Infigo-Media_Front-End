@@ -11,6 +11,7 @@ import Login from "./screens/Login";
 import Add from "./screens/Product/Add";
 import Manage from "./screens/Product/Manage";
 import Message from "./screens/Message";
+import Customize from "./screens/Customize";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/" element={<Layout/>}>
           <Route index element={<Home/>}></Route>
           <Route path="content" element={<Content/>}></Route>
+          <Route path="customize" element={<Customize/>}></Route>
           <Route path="message" element={<Message/>}></Route>
           <Route path="product/add" element={<Add/>}></Route>
           <Route path="product/manage" element={<Manage/>}></Route>

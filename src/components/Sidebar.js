@@ -5,6 +5,7 @@ import { FaProductHunt, FaPlus, FaEye } from 'react-icons/fa'; // Importing icon
 import '../App.css';
 import logo from '../assets/logo.png';
 import {FaRegMessage} from "react-icons/fa6";
+import {BiCustomize} from "react-icons/bi";
 
 const Sidebar = () => {
     const [isProductMenuOpen, setProductMenuOpen] = useState(false);
@@ -42,6 +43,10 @@ const Sidebar = () => {
                 <li className="sidebarItem">
                     <Link to="/content" className="sidebarLink"><MdArticle
                         style={{marginRight: '10px'}}/> Content</Link>
+                </li>
+                <li className="sidebarItem">
+                    <Link to="/content" className="sidebarLink"><BiCustomize
+                        style={{marginRight: '10px'}}/> Customize</Link>
                 </li>
             </ul>
         </div>
