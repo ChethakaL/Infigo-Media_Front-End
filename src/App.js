@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import 'semantic-ui-css/semantic.min.css'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 
 // Screens
 import Layout from "./screens/Layout";
@@ -18,7 +18,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login/>}></Route>
-        <Route path="/admin" element={<Layout/>}>
+        <Route path="/admin/*" element={<Layout/>}>
           <Route index element={<Home/>}></Route>
           <Route path="content" element={<Content/>}></Route>
           <Route path="customize" element={<Customize/>}></Route>
@@ -26,6 +26,8 @@ function App() {
           <Route path="product/add" element={<Add/>}></Route>
           <Route path="product/manage" element={<Manage/>}></Route>
         </Route>
+
+        <Route path="/*" element={<Navigate to="/admin" replace />} />
       </Routes>
     </BrowserRouter>
   );
