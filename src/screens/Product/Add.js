@@ -1,17 +1,23 @@
 import React, {useState, useEffect} from 'react'
 import {Dropdown, Select} from "semantic-ui-react";
 import {FaPlus} from "react-icons/fa";
+import axios from "axios";
 
 function Add() {
     // Variables
+    const [productName, setProductName] = useState("");
     const [productType, setProductType] = useState("");
+    const [productPrice, setProductPrice] = useState("");
     const [sizeType, setSizeType] = useState("");
     const [qty, setQty] = useState("");
     const [inputValue, setInputValue] = useState('');
+    const [productImage, setProductImage] = useState(null);
 
     // Arrays
     const [stocks, setStocks] = useState([]);
     const [colors, setColors] = useState([]);
+    const [productColors, setProductColors] = useState([]);
+    const [sizes, setSizes] = useState([]);
 
     // Select Options
     const productTypeOptions = [
@@ -31,35 +37,117 @@ function Add() {
         { key: 'red', value: 'Red', text: 'Red' },
         { key: 'blue', value: 'Blue', text: 'Blue' },
         { key: 'green', value: 'Green', text: 'Green' },
+        { key: 'yellow', value: 'Yellow', text: 'Yellow' },
+        { key: 'black', value: 'Black', text: 'Black' },
+        { key: 'white', value: 'White', text: 'White' },
+        { key: 'gray', value: 'Gray', text: 'Gray' },
+        { key: 'brown', value: 'Brown', text: 'Brown' },
+        { key: 'orange', value: 'Orange', text: 'Orange' },
+        { key: 'pink', value: 'Pink', text: 'Pink' },
+        { key: 'purple', value: 'Purple', text: 'Purple' },
+        { key: 'beige', value: 'Beige', text: 'Beige' },
+        { key: 'navy', value: 'Navy', text: 'Navy' },
+        { key: 'teal', value: 'Teal', text: 'Teal' },
+        { key: 'maroon', value: 'Maroon', text: 'Maroon' },
+        { key: 'khaki', value: 'Khaki', text: 'Khaki' },
+        { key: 'olive', value: 'Olive', text: 'Olive' },
+        { key: 'silver', value: 'Silver', text: 'Silver' },
+        { key: 'gold', value: 'Gold', text: 'Gold' },
+        { key: 'turquoise', value: 'Turquoise', text: 'Turquoise' }
         // Add more color options as needed
     ];
 
+
     // Stock function
+    // const addStock = () => {
+    //     if (!sizeType || colors.length === 0 || !qty) {
+    //         alert("Please fill all the fields before adding stock");
+    //         return;
+    //     }
+    //
+    //     const newStock = {
+    //         size: sizeType,
+    //         colors: colors,
+    //         qty: qty
+    //     };
+    //
+    //     // Add the new stock to the existing stocks
+    //     setStocks([...stocks, newStock]);
+    //
+    //     // Reset the form fields
+    //     setSizeType("");
+    //     setColors([]);
+    //     setQty("");
+    // };
     const addStock = () => {
-        if (!sizeType || colors.length === 0 || !qty) {
+        if (!sizes.length || !productColors.length || !qty) {
             alert("Please fill all the fields before adding stock");
             return;
         }
 
-        const newStock = {
-            size: sizeType,
-            colors: colors,
-            qty: qty
-        };
+        const newStockEntries = sizes.flatMap(size =>
+            productColors.map(color => ({
+                size,
+                color,
+                qty: parseInt(qty, 10)
+            }))
+        );
 
-        // Add the new stock to the existing stocks
-        setStocks([...stocks, newStock]);
+        setStocks(stocks.concat(newStockEntries));
 
-        // Reset the form fields
-        setSizeType("");
-        setColors([]);
+        // Reset form fields for next entry
+        setSizes([]);
+        setProductColors([]);
         setQty("");
     };
+
 
     const removeStock = (index) => {
         const newStocks = stocks.filter((_, i) => i !== index);
         setStocks(newStocks);
     };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append('productName', productName);
+        formData.append('productType', productType);
+        formData.append('productPrice', productPrice); // Add price to form data
+        formData.append('name', productName); // Add name to form data
+        formData.append('image', productImage);
+
+        // Add stock data
+        stocks.forEach((stock, index) => {
+            formData.append(`stocks[${index}][size]`, stock.size);
+            formData.append(`stocks[${index}][colors]`, stock.colors.join(','));
+            formData.append(`stocks[${index}][qty]`, stock.qty);
+        });
+        // For each color selected, append it to the form data
+        productColors.forEach((color, index) => {
+            formData.append(`colors[${index}]`, color);
+        });
+
+        // For sizes, if you're allowing multiple selections, handle them similarly to colors
+        sizes.forEach((size, index) => {
+            formData.append(`sizes[${index}]`, size);
+        });
+
+
+        try {
+            const response = await axios.post('http://localhost:4001/backend/api/shop/product', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            console.log('Product added successfully:', response.data);
+            // Reset form fields after successful submission
+        } catch (error) {
+            console.error('Error adding product:', error);
+            // Handle error
+        }
+    };
+
 
     return (
         <div className='row add-product' style={{justifyContent: 'center'}}>
@@ -67,18 +155,32 @@ function Add() {
                 <h2>Add Product</h2>
                 <form className='ui form'>
                     <div className='field'>
-                        <div className='two fields'>
-                            <div className='seven wide field'>
+                        <div className='three fields'>
+                            <div className='six wide field'>
                                 <label>Product Name</label>
-                                <input type='text'/>
+                                <input
+                                    type='text'
+                                    placeholder='Name'
+                                    value={productName}
+                                    onChange={(e)=>setProductName(e.target.value)}
+                                />
                             </div>
-                            <div className='seven wide field'>
+                            <div className='six wide field'>
                                 <label>Product Type</label>
                                 <Select
                                     options={productTypeOptions}
                                     placeholder='Product Type'
                                     value={productType}
                                     onChange={(e, data) => setProductType(data.value)}
+                                />
+                            </div>
+                            <div className='two wide field'>
+                                <label>Product Price</label>
+                                <input
+                                    type='number'
+                                    placeholder='$'
+                                    value={productPrice}
+                                    onChange={(e) => setProductPrice(e.target.value)}
                                 />
                             </div>
                         </div>
@@ -92,11 +194,14 @@ function Add() {
                         <div className='three fields'>
                             <div className='six wide field'>
                                 <label>Sizes</label>
-                                <Select
-                                    placeholder='Size'
+                                <Dropdown
+                                    placeholder='Select Size'
+                                    multiple
+                                    search
+                                    selection
                                     options={sizeTypeOptions}
-                                    value={sizeType || ""}
-                                    onChange={(e, data) => setSizeType(data.value)}
+                                    onChange={(e, {value}) => setSizeType(value)}
+                                    value={sizeType}
                                 />
                             </div>
                             <div className='six wide field'>
@@ -142,12 +247,12 @@ function Add() {
                         <div className='one fields'>
                             <div className='fourteen wide field'>
                                 <label>Image</label>
-                                <input type='file'/>
+                                <input type='file' onChange={(e) => setProductImage(e.target.files[0])}/>
                             </div>
                         </div>
                     </div>
                     <div className='row'>
-                        <button className='ui primary button'>Submit</button>
+                        <button className='ui primary button' onClick={handleSubmit}>Submit</button>
                         <button className='ui secondary button'>Reset</button>
                     </div>
 

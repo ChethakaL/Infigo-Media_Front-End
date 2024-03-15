@@ -1,10 +1,20 @@
-import React from 'react'
-import {Outlet} from "react-router-dom"
+import React, {useEffect} from 'react'
+import {Outlet, useNavigate} from "react-router-dom"
 
 //Components
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 function Layout() {
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+        }
+    }, [navigate]);
+
     return (
         <div>
             <div className='layout-container'>
