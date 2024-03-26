@@ -22,6 +22,7 @@ function Login() {
             navigate("/");
         } catch (error) {
             setError('Invalid username or password');
+            console.log('email, password', email,password);
         }
     }
 
