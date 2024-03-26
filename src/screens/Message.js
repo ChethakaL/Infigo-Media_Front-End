@@ -15,13 +15,12 @@ function Message() {
     useEffect(() => {
         const fetchWhatsappConversations = async () => {
             try {
-                // const response = await fetch('https://infigomedia.xyz/backend/api/message/conversations');
-                const response = await fetch(`http://localhost:4001/backend/api/message/conversations`);
+                const response = await fetch(`http://localhost:4001/backend/api/whatsapp/conversations`);
                 const data = await response.json();
                 console.log(data);
                 const formattedConversations = data.map(conv => ({
-                    id: conv._id,
-                    name: conv._id.replace('whatsapp:', ''),
+                    _id: conv.number, // Using 'number' as the unique identifier since '_id' is not present
+                    name: conv.conversationId.replace('whatsapp:', '').replace('whatsapp:', ''), // Removing 'whatsapp:' prefix twice due to the format
                     snippet: conv.lastMessage,
                     time: new Date(conv.lastMessageTime).toLocaleTimeString(),
                     profilePic: '/default-profile.png' // Placeholder path for profile pictures
@@ -37,16 +36,27 @@ function Message() {
 
 
     const handleSelectConversation = (conversation, service) => {
-        const phoneNumber = conversation.id.replace('whatsapp:', '');
+        console.log('Selected conversation:', conversation); // Debug log to see the selected conversation object
+
+        // Changed from conversation.id to conversation._id
+        if (!conversation || !conversation._id) {
+            console.error('Invalid conversation object:', conversation);
+            return; // Exit the function if conversation or conversation._id is undefined
+        }
+
+        // Changed from conversation.id to conversation._id
+        const phoneNumber = conversation.name.replace('whatsapp:', '');
         setPhone(phoneNumber);
+
         const endpoint = service === 'whatsapp'
-            ? `http://localhost:4001/backend/api/message/conversations/${phoneNumber}`
+            ? `http://localhost:4001/backend/api/whatsapp/conversations/${phoneNumber}`
             : `https://infigomedia.xyz/backend/api/facebook/messages/${conversation.senderId}`;
+
         axios.get(endpoint)
             .then(response => {
                 const { data } = response;
-                if (data && data.messages) {
-                    setMessages(data.messages);
+                if (data && data.conversation) { // Changed from data.messages to data.conversation
+                    setMessages(data.conversation); // Adjusted to the correct path based on your backend response
                 } else {
                     console.error('No messages found');
                 }
@@ -56,13 +66,14 @@ function Message() {
             });
     };
 
+
     const handleSend = async () => {
         if (!sendMessage.trim()) return;
 
         try {
-            const { data } = await axios.post(`http://localhost:4001/backend/api/message/send-whatsapp`, {
-                body: sendMessage,
-                to: phone
+            const { data } = await axios.post(`http://localhost:4001/backend/api/whatsapp/send-whatsapp`, {
+                to: phone,
+                body: sendMessage
             });
 
             if (data.success) {
@@ -111,7 +122,7 @@ function Message() {
                     <MessageItem
                         key={index}
                         message={msg}
-                        isOutgoing={msg.from === userNumber}
+                        isOutgoing={msg.senderType !== 'client'} // Assuming 'client' indicates an incoming message
                     />
                 ))}
             </div>

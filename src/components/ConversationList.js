@@ -8,14 +8,14 @@ function ConversationList({ title, conversations, onSelectConversation }) {
             <div className="conversation-list">
                 {conversations.map((conv) => (
                     <div
-                        key={conv.id}
+                        key={conv._id}
                         className="conversation-item"
                         onClick={() => onSelectConversation(conv)}
                     >
                         <div className="conversation-photo"><FaPerson size={24}/></div>
                         <div className="conversation-info">
                             <h1 className="conversation-title">{conv.name}</h1>
-                            <p className="conversation-snippet">{conv.snippet}</p>
+                            <p className="conversation-snippet">{conv.lastMessage}</p>
                             <p className="conversation-time">{conv.time}</p>
                         </div>
                     </div>
