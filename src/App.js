@@ -12,6 +12,9 @@ import Add from "./screens/Product/Add";
 import Manage from "./screens/Product/Manage";
 import Message from "./screens/Message";
 import Customize from "./screens/Customize";
+import Posting from "./screens/Posting";
+import Scheduler from "./screens/Scheduler";
+import Orders from "./screens/Product/Orders";
 
 function App() {
   return (
@@ -25,6 +28,9 @@ function App() {
           <Route path="message" element={<Message/>}></Route>
           <Route path="product/add" element={<Add/>}></Route>
           <Route path="product/manage" element={<Manage/>}></Route>
+          <Route path="product/orders" element={<Orders/>}></Route>
+          <Route path="post" element={<Posting/>}></Route>
+          <Route path="scheduler" element={<Scheduler/>}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

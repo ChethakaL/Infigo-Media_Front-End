@@ -464,3 +464,84 @@
   border-radius: 10px;
   padding:1rem;
 }
+.message {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  max-width: 70%;
+}
+
+.message-outgoing {
+  align-items: flex-end;
+  margin-left: auto;
+  background-color: #DCF8C6; /* Light green background for outgoing messages */
+}
+
+.message-incoming {
+  align-items: flex-start;
+  background-color: #ECECEC; /* Light grey background for incoming messages */
+}
+
+.message-content {
+  padding: 8px 12px;
+  border-radius: 18px;
+  margin-bottom: 4px;
+  font-size: 16px;
+  color: #333; /* Dark text color for better readability */
+}
+
+.message-timestamp {
+  font-size: 12px;
+  color: #666; /* Lighter text color for timestamps */
+  margin: 0 12px 2px; /* Adjust spacing to align with the message bubble */
+}
+
+
+/*Heatmap*/
+.color-empty { background-color: #ffffff; }
+.color-scale-1 { background-color: #d6e685; } /* 1-10 interactions */
+.color-scale-2 { background-color: #8cc665; } /* 11-20 interactions */
+.color-scale-3 { background-color: #44a340; } /* 21-30 interactions */
+.color-scale-4 { background-color: #1e6823; } /* 31+ interactions */
+
+/* Add the CSS for the legend here */
+.legend {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+.color-box {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  display: inline-block;
+}
+.react-calendar {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+}
+
+/* Override the default width of the calendar tiles */
+.react-calendar__month-view__days__day {
+  flex-grow: 1;
+}
+
+/* Add your existing styles here, including the .legend and .color-box styles */
+
+
+.day.selected {
+  border: 2px solid #000000; /* Style for selected day */
+}
+
+/* Apply the color classes to the legend boxes */
+.color-box.color-scale-1 { background-color: #d6e685; }
+.color-box.color-scale-2 { background-color: #8cc665; }
+.color-box.color-scale-3 { background-color: #44a340; }
+.color-box.color-scale-4 { background-color: #1e6823; }
+

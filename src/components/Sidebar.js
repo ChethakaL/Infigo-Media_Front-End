@@ -5,7 +5,7 @@ import { FaProductHunt, FaPlus, FaEye } from 'react-icons/fa'; // Importing icon
 import '../App.css';
 import logo from '../assets/logo.png';
 import {FaRegMessage} from "react-icons/fa6";
-import {BiCustomize} from "react-icons/bi";
+import {BiCalendar, BiCustomize, BiImage, BiSolidTruck} from "react-icons/bi";
 
 const Sidebar = () => {
     const [isProductMenuOpen, setProductMenuOpen] = useState(false);
@@ -34,6 +34,8 @@ const Sidebar = () => {
                             style={{marginRight: '10px'}}/> Add</Link>
                         <Link to="/product/manage" className="sidebarSubLink"><FaEye
                             style={{marginRight: '10px'}}/> Manage</Link>
+                        <Link to="/product/orders" className="sidebarSubLink"><BiSolidTruck
+                            style={{marginRight: '10px'}}/> Orders</Link>
                     </div>
                 </li>
                 <li className="sidebarItem">
@@ -47,6 +49,14 @@ const Sidebar = () => {
                 <li className="sidebarItem">
                     <Link to="/content" className="sidebarLink"><BiCustomize
                         style={{marginRight: '10px'}}/> Customize</Link>
+                </li>
+                <li className="sidebarItem">
+                    <Link to="/post" className="sidebarLink"><BiImage
+                        style={{marginRight: '10px'}}/> Post</Link>
+                </li>
+                <li className="sidebarItem">
+                    <Link to="/scheduler" className="sidebarLink"><BiCalendar
+                        style={{marginRight: '10px'}}/> Scheduler</Link>
                 </li>
             </ul>
         </div>

@@ -2,12 +2,14 @@ import React, {useState, useEffect} from 'react'
 import {Dropdown, Select} from "semantic-ui-react";
 import {FaPlus} from "react-icons/fa";
 import axios from "axios";
+import {toast} from "react-toastify";
 
 function Add() {
     // Variables
     const [productName, setProductName] = useState("");
     const [productType, setProductType] = useState("");
     const [productPrice, setProductPrice] = useState("");
+    const [description,setDescription] = useState("");
     const [sizeType, setSizeType] = useState("");
     const [qty, setQty] = useState("");
     const [inputValue, setInputValue] = useState('');
@@ -80,32 +82,67 @@ function Add() {
     //     setQty("");
     // };
     const addStock = () => {
-        if (!sizes.length || !productColors.length || !qty) {
+        if (sizes.length === 0 || colors.length === 0 || !qty) {
             alert("Please fill all the fields before adding stock");
             return;
         }
 
         const newStockEntries = sizes.flatMap(size =>
-            productColors.map(color => ({
-                size,
-                color,
+            colors.map(color => ({
+                size: size,
+                color: color,
                 qty: parseInt(qty, 10)
             }))
         );
 
-        setStocks(stocks.concat(newStockEntries));
+        setStocks([...stocks, ...newStockEntries]);
 
-        // Reset form fields for next entry
+        // Reset the form fields
         setSizes([]);
-        setProductColors([]);
+        setColors([]);
         setQty("");
     };
-
 
     const removeStock = (index) => {
         const newStocks = stocks.filter((_, i) => i !== index);
         setStocks(newStocks);
     };
+
+    const handleAiGenerate = async (e) => {
+        e.preventDefault();
+
+        // Check if all necessary data is available
+        if (!productImage || !productName || !productType || !productPrice || stocks.length === 0) {
+            alert("Please fill all the fields before generating description");
+            return;
+        }
+
+        const generativeData = new FormData();
+        generativeData.append('image', productImage);
+        generativeData.append('productName', productName);
+        generativeData.append('productType', productType);
+        generativeData.append('productPrice', productPrice);
+        stocks.forEach((stock, index) => {
+            generativeData.append(`stocks[${index}][size]`, stock.size);
+            generativeData.append(`stocks[${index}][color]`, stock.color);
+            generativeData.append(`stocks[${index}][qty]`, stock.qty);
+        });
+
+        try {
+            const response = await axios.post('https://infigomedia.xyz/backend/api/post/generate-description/add', generativeData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            const data = await response.data;
+            setDescription(data.description);
+            console.log('description: ', data.description);
+        } catch (error) {
+            console.error('Error generating description: ', error);
+            // Handle error
+        }
+    };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -114,39 +151,38 @@ function Add() {
         formData.append('productName', productName);
         formData.append('productType', productType);
         formData.append('productPrice', productPrice); // Add price to form data
+        formData.append('description', description);
         formData.append('name', productName); // Add name to form data
         formData.append('image', productImage);
 
         // Add stock data
         stocks.forEach((stock, index) => {
             formData.append(`stocks[${index}][size]`, stock.size);
-            formData.append(`stocks[${index}][colors]`, stock.colors.join(','));
+            formData.append(`stocks[${index}][color]`, stock.color);
             formData.append(`stocks[${index}][qty]`, stock.qty);
         });
-        // For each color selected, append it to the form data
-        productColors.forEach((color, index) => {
-            formData.append(`colors[${index}]`, color);
-        });
-
-        // For sizes, if you're allowing multiple selections, handle them similarly to colors
-        sizes.forEach((size, index) => {
-            formData.append(`sizes[${index}]`, size);
-        });
-
 
         try {
-            const response = await axios.post('http://localhost:4001/backend/api/shop/product', formData, {
+            const response = await axios.post('https://infigomedia.xyz/backend/api/shop/product', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
             console.log('Product added successfully:', response.data);
-            // Reset form fields after successful submission
+            toast.success('Successfully added');
+            setProductName('');
+            setProductType('');
+            setProductPrice('');
+            setDescription('');
+            setProductImage(null);
+            setStocks([]);
+
         } catch (error) {
             console.error('Error adding product:', error);
             // Handle error
         }
     };
+
 
 
     return (
@@ -162,7 +198,7 @@ function Add() {
                                     type='text'
                                     placeholder='Name'
                                     value={productName}
-                                    onChange={(e)=>setProductName(e.target.value)}
+                                    onChange={(e) => setProductName(e.target.value)}
                                 />
                             </div>
                             <div className='six wide field'>
@@ -200,8 +236,8 @@ function Add() {
                                     search
                                     selection
                                     options={sizeTypeOptions}
-                                    onChange={(e, {value}) => setSizeType(value)}
-                                    value={sizeType}
+                                    onChange={(e, {value}) => setSizes(value)} // Adjusted to set `sizes`
+                                    value={sizes}
                                 />
                             </div>
                             <div className='six wide field'>
@@ -212,7 +248,7 @@ function Add() {
                                     search
                                     selection
                                     options={colorOptions}
-                                    onChange={(e, {value}) => setColors(value)}
+                                    onChange={(e, {value}) => setColors(value)} // Adjusted to set `productColors`
                                     value={colors}
                                 />
                             </div>
@@ -221,7 +257,7 @@ function Add() {
                                 <input
                                     type='text'
                                     value={qty}
-                                    onChange={(e)=> setQty(e.target.value)}
+                                    onChange={(e) => setQty(e.target.value)}
                                 />
                             </div>
                         </div>
@@ -236,8 +272,9 @@ function Add() {
                             <tbody>
                             {stocks.map((stock, index) => (
                                 <tr key={index}>
-                                    <td>{stock.size}</td>
-                                    <td>{stock.colors.join(', ')}</td>
+                                    <td>{stock.size || 'No size is selected'}</td>
+                                    {/*<td>{stock.colors ? stock.colors.join(', ') : 'No colors'}</td>*/}
+                                    <td>{stock.color || "No color is selected"}</td>
                                     <td>{stock.qty}</td>
                                 </tr>
                             ))}
@@ -249,6 +286,20 @@ function Add() {
                                 <label>Image</label>
                                 <input type='file' onChange={(e) => setProductImage(e.target.files[0])}/>
                             </div>
+                        </div>
+                        <div className='one fields'>
+                            <div className='fourteen wide field'>
+                                <label>Description</label>
+                                <input
+                                    type='text'
+                                    placeholder='Description'
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                />
+                            </div>
+                            <button className='ui purple button' style={{marginTop: 20}} onClick={handleAiGenerate}>AI
+                                Generate
+                            </button>
                         </div>
                     </div>
                     <div className='row'>

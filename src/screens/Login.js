@@ -15,7 +15,7 @@ function Login() {
     const handleClick = async () => {
         try {
             const response = await axios.post('https://infigomedia.xyz/backend/api/user/login', { email, password });
-            // const response = await axios.post('http://localhost:4001/backend/api/user/login', { email, password });
+            // const response = await axios.post('https://infigomedia.xyz/backend/api/user/login', { email, password });
             const { token } = response.data;
             localStorage.setItem('token', token); // Store the token in local storage
             toast.success('Successfully logged in')

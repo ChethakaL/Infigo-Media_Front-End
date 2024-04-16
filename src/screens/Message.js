@@ -15,7 +15,7 @@ function Message() {
     useEffect(() => {
         const fetchWhatsappConversations = async () => {
             try {
-                const response = await fetch(`http://localhost:4001/backend/api/whatsapp/conversations`);
+                const response = await fetch(`https://infigomedia.xyz/backend/api/whatsapp/conversations`);
                 const data = await response.json();
                 console.log(data);
                 const formattedConversations = data.map(conv => ({
@@ -30,8 +30,26 @@ function Message() {
                 console.error('Error fetching WhatsApp conversations:', error);
             }
         };
+        // Fetch Facebook Conversations
+        const fetchFacebookConversations = async () => {
+            try {
+                const response = await fetch(`https://infigomedia.xyz/backend/api/facebook/threads`);
+                const data = await response.json();
+                const formattedConversations = data.map(conv => ({
+                    _id: conv.senderId, // Assuming 'senderId' is the unique identifier
+                    name: `User ${conv.senderId}`, // Placeholder for user name. Update according to your data structure
+                    snippet: 'Last message snippet', // Placeholder. You might need to adjust this based on your actual data
+                    time: 'Time', // Placeholder for the last message time
+                    profilePic: '/default-profile.png' // Placeholder path for profile pictures
+                }));
+                setFacebookConversations(formattedConversations);
+            } catch (error) {
+                console.error('Error fetching Facebook conversations:', error);
+            }
+        };
 
         fetchWhatsappConversations();
+        fetchFacebookConversations();
     }, []);
 
 
@@ -49,7 +67,7 @@ function Message() {
         setPhone(phoneNumber);
 
         const endpoint = service === 'whatsapp'
-            ? `http://localhost:4001/backend/api/whatsapp/conversations/${phoneNumber}`
+            ? `https://infigomedia.xyz/backend/api/whatsapp/conversations/${phoneNumber}`
             : `https://infigomedia.xyz/backend/api/facebook/messages/${conversation.senderId}`;
 
         axios.get(endpoint)
@@ -71,7 +89,7 @@ function Message() {
         if (!sendMessage.trim()) return;
 
         try {
-            const { data } = await axios.post(`http://localhost:4001/backend/api/whatsapp/send-whatsapp`, {
+            const { data } = await axios.post(`https://infigomedia.xyz/backend/api/whatsapp/send-whatsapp`, {
                 to: phone,
                 body: sendMessage
             });
